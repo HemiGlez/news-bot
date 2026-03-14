@@ -25,3 +25,8 @@ From the project root folder (NewsBot), run:
 pipenv install
 pipenv shell
 ```
+
+### Running the Tests
+```bash
+pipenv run python -m pytest -v --rootdir=.
+```

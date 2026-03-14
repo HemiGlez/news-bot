@@ -4,9 +4,11 @@ from src.infrastructure.databases.sqlite.connection import get_connection
 def main():
     connection = get_connection()
 
-    apply_migrations(connection)
-
-    print("BotNews correctly initiated.")
+    try:
+        apply_migrations(connection)
+        print("BotNews correctly initiated.")
+    finally:
+        connection.close()
 
 if __name__ == "__main__":
     main()

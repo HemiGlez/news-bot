@@ -1,5 +1,3 @@
-from src.infrastructure.databases.sqlite.connection import get_connection
-
 MIGRATIONS = [
     {
         "id": "0001_create_news_table",

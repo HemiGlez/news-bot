@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 validators = "*"
+python-dotenv = "*"
 
 [dev-packages]
 pytest = "*"

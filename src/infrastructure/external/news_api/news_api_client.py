@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 from src.domain.news.models import News
 from typing import List, Optional
+from src.domain.news.providers.news_provider import NewsProvider 
 import logging
 import math
 
@@ -24,7 +25,7 @@ class NewsApiRequestError(Exception):
     pass
 
 
-class NewsApiClient:
+class NewsApiClient(NewsProvider):
     def __init__(self, api_key: str):
         self.api_key = api_key
 

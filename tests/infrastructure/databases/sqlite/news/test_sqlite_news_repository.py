@@ -1,7 +1,7 @@
 import sqlite3
 import pytest
 
-from src.infrastructure.databases.sqlite.news.news_service import insert_news
+from src.infrastructure.databases.sqlite.news.sqlite_news_repository import SqliteNewsRepository
 from src.domain.news.models import News
 from src.infrastructure.databases.sqlite.migrations import apply_migrations
 from datetime import datetime
@@ -15,10 +15,12 @@ def sqlite_connection():
     conn.close()
 
 
-def test_insert_news_persists_news(sqlite_connection):
+def test_save_persists_news(sqlite_connection):
     """
     Test that insert_news correctly persists a News record in the database.
     """
+    repository = SqliteNewsRepository(sqlite_connection)
+
     news = News(
         title="Test news",
         url="https://example.com",
@@ -26,7 +28,7 @@ def test_insert_news_persists_news(sqlite_connection):
         published_at=datetime(2026, 3, 12)
     )
 
-    insert_news(news, sqlite_connection)
+    repository.save(news)
 
     cursor = sqlite_connection.cursor()
     cursor.execute("SELECT title, url, source FROM news")
@@ -36,4 +38,3 @@ def test_insert_news_persists_news(sqlite_connection):
     assert result[0] == "Test news"
     assert result[1] == "https://example.com"
     assert result[2] == "TestSource"
-

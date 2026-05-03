@@ -21,14 +21,18 @@ def test_migrations_create_news_table(sqlite_connection):
 
     assert cursor.fetchone() is not None
 
-def test_migration_is_registered(sqlite_connection):
+def test_migration_are_registered(sqlite_connection):
     apply_migrations(sqlite_connection)
 
     cursor = sqlite_connection.cursor()
-    cursor.execute("SELECT id FROM migrations")
+    cursor.execute("SELECT id FROM migrations ORDER BY id")
 
-    result = cursor.fetchone()
-    assert result[0] == "0001_create_news_table"
+    result = [row[0] for row in cursor.fetchall()]
+
+    assert result == [
+        "0001_create_news_table",
+        "0002_create_telegram_preferences"
+    ]
 
 def test_migrations_are_idempotent(sqlite_connection):
     # We apply migrations first time to apply all the migrations
@@ -39,7 +43,7 @@ def test_migrations_are_idempotent(sqlite_connection):
 
     count_first_time = cursor.fetchone()[0]
 
-    assert count_first_time == 1
+    assert count_first_time == 2
 
     # We apply the migrations a second time, this time should not migrate anything
     apply_migrations(sqlite_connection)
@@ -49,4 +53,15 @@ def test_migrations_are_idempotent(sqlite_connection):
 
     count_second_time = cursor.fetchone()[0]
 
-    assert count_second_time == 1
+    assert count_second_time == 2
+
+def test_migrations_create_telegram_preferences_table(sqlite_connection):
+    apply_migrations(sqlite_connection)
+
+    cursor = sqlite_connection.cursor()
+    cursor.execute("""
+        SELECT name FROM sqlite_master
+        WHERE type='table' AND name='telegram_preferences'
+    """)
+
+    assert cursor.fetchone() is not None

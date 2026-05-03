@@ -14,6 +14,17 @@ MIGRATIONS = [
                 UNIQUE(url, source)
             )
         """
+    },
+    {
+        "id": "0002_create_telegram_preferences",
+        "sql": """
+            CREATE TABLE IF NOT EXISTS telegram_preferences (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                chat_id TEXT NOT NULL UNIQUE,
+                category TEXT NOT NULL,
+                updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+            )
+        """
     }
 ]
 
